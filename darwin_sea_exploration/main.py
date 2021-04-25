@@ -1,12 +1,13 @@
 # Import pyspark related modules
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import count
+from pyspark.sql.functions import count, col, to_date
 
 # Import other modules
 from marshmallow.exceptions import ValidationError
 from pathlib import Path
 import simplejson
 import os
+import shutil
 
 # Local imports
 from darwin_sea_exploration.utils.schema import get_schema, DataSchema
@@ -24,13 +25,13 @@ def create_pyspark_session():
     return scSpark
 
 
-def load_data(input_folder, scSpark):
+def load_data(input_folder, scSpark, filename):
     """
     Aggregate data and return the aggregate recipe data set
     :return: Spark Dataframe
     """
     try:
-        raw_data_path = input_folder.joinpath('input.json')
+        raw_data_path = input_folder.joinpath(filename)
         folderpath = input_folder.joinpath('input')
         transfer_valid_files(raw_data_path, folderpath)
         sdf_data = scSpark.read.json(f"{folderpath}/*.json", schema=get_schema()).cache()
@@ -42,10 +43,12 @@ def load_data(input_folder, scSpark):
 
 def transfer_valid_files(filepath, folderpath):
     # create the output directory to save data
-    os.makedirs(folderpath, exist_ok=True)
+    if os.path.exists(folderpath):
+        shutil.rmtree(folderpath)
+    os.makedirs(folderpath)
 
-    cnt = 0
     with open(filepath, 'r') as fpr:
+        cnt = 0
         for line in fpr:
             try:
                 raw_content = simplejson.loads(line)
@@ -72,7 +75,7 @@ def save_data(sdf_data, output_folder_path):
         print(f"Error has occurred while trying to save the files: {e}")
 
 
-def main():
+def main(input_filename):
     """
     Orchestrator of the project. This reads in the data, transforms the recipes into desired output and saves them
     :return: n/a
@@ -82,9 +85,9 @@ def main():
 
     # Create PySpark session to extract out recipe related information
     scSpark = create_pyspark_session()
-    sdf_data = load_data(data_folder_path, scSpark)
+    sdf_data = load_data(data_folder_path, scSpark, input_filename)
     sdf_data = perform_transformations(sdf_data)
-    sdf_data.show()
+
     save_data(sdf_data, data_folder_path)
     scSpark.stop()
 
@@ -95,9 +98,10 @@ def perform_transformations(sdf_data):
     :param sdf_data: Pyspark Dataframe
     :return: resulting dataframe after transformations are performed
     """
-    sdf_data = sdf_data.groupBy(["event", "timestamp"]).count().alias("event_count")
+    sdf_data = sdf_data.withColumn("date", to_date(col("timestamp")))
+    sdf_data = sdf_data.groupBy(["event", "date"]).count().alias("event_count")
     return sdf_data
 
 
 if __name__ == '__main__':
-    main()
+    main(input_filename="input.json")

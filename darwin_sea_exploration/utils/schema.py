@@ -1,8 +1,5 @@
-import pandas as pd
-from marshmallow import fields, Schema, validate
-from marshmallow.validate import OneOf
-from pyspark.sql.types import StructType, StructField, DoubleType
-from pyspark.sql.types import StringType, BooleanType
+from marshmallow import fields, Schema
+from pyspark.sql.types import StructType, StructField, BooleanType, StringType
 
 
 # input schema validation for json requests
@@ -15,7 +12,7 @@ class DataSchema(Schema):
     context_device_manufacturer = fields.Str(required=True)
     context_device_model = fields.Str(required=True)
     context_device_type = fields.Str(required=True)
-    context_library_name = fields.Str(required=False, )
+    context_library_name = fields.Str(required=False)
     context_library_version = fields.Str(required=False)
     context_locale = fields.Str(required=True)
     context_network_wifi = fields.Bool(required=True)
@@ -38,23 +35,23 @@ def get_schema():
         StructField('id', StringType(), True),
         StructField('received_at', StringType(), True),
         StructField('anonymous_id', StringType(), True),
-        StructField('context_app_version', StringType(), False),
-        StructField('context_device_ad_tracking_enabled', BooleanType(), False),
+        StructField('context_app_version', StringType(), True),
+        StructField('context_device_ad_tracking_enabled', BooleanType(), True),
         StructField('context_device_manufacturer', StringType(), True),
         StructField('context_device_model', StringType(), True),
         StructField('context_device_type', StringType(), True),
-        StructField('context_library_name', StringType(), False),
-        StructField('context_library_version', StringType(), False),
+        StructField('context_library_name', StringType(), True),
+        StructField('context_library_version', StringType(), True),
         StructField('context_locale', StringType(), True),
         StructField('context_network_wifi', BooleanType(), True),
         StructField('context_os_name', StringType(), True),
-        StructField('context_timezone', StringType(), False),
+        StructField('context_timezone', StringType(), True),
         StructField('event', StringType(), True),
         StructField('event_text', StringType(), True),
         StructField('original_timestamp', StringType(), True),
         StructField('sent_at', StringType(), True),
         StructField('timestamp', StringType(), True),
-        StructField('user_id', StringType(), False),
+        StructField('user_id', StringType(), True),
         StructField('context_network_carrier', StringType(), True),
         StructField('context_device_token', StringType(), True),
         StructField('context_traits_taxfix_language', StringType(), True)
