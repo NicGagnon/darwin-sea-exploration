@@ -42,6 +42,12 @@ def load_data(input_folder, scSpark, filename):
 
 
 def transfer_valid_files(filepath, folderpath):
+    """
+    transfers individual json objects to independent files for manageable batch processing with spark
+    :param filepath: target input file
+    :param folderpath: target output folder to store the files
+    :return: n/a
+    """
     # create the output directory to save data
     if os.path.exists(folderpath):
         shutil.rmtree(folderpath)
@@ -77,7 +83,7 @@ def save_data(sdf_data, output_folder_path):
 
 def main(input_filename):
     """
-    Orchestrator of the project. This reads in the data, transforms the recipes into desired output and saves them
+    Orchestrator of the project. This reads in the data, transforms the event data into desired output and saves them
     :return: n/a
     """
     # Create Folder Paths
