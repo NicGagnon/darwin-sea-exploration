@@ -7,13 +7,7 @@ Schema validation for Taxfix takehome assignment
 .
 ├── darwin_sea_exploration
 │   ├── data
-│   │   ├── ga-sessions
-│   │   └── transaction-data
-│   ├── sql_queries # Part 1 Answers
-│   │   ├── 1.sql
-│   │   ├── 2.sql
-│   │   ├── 3.sql
-│   │   └── 4.sql
+│   │   └── input.json
 │   ├── tests
 │   │   ├── __init__.py
 │   │   ├── conftest.py
