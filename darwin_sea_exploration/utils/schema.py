@@ -1,6 +1,8 @@
 import pandas as pd
 from marshmallow import fields, Schema, validate
 from marshmallow.validate import OneOf
+from pyspark.sql.types import StructType, StructField, DoubleType
+from pyspark.sql.types import StringType, BooleanType
 
 
 # input schema validation for json requests
@@ -28,3 +30,32 @@ class DataSchema(Schema):
     context_network_carrier = fields.Str(required=True)
     context_device_token = fields.Str(required=False, allow_none=True)
     context_traits_taxfix_language = fields.Str(required=True)
+
+
+def get_schema():
+    # Return recipe schema
+    return StructType([
+        StructField('id', StringType(), True),
+        StructField('received_at', StringType(), True),
+        StructField('anonymous_id', StringType(), True),
+        StructField('context_app_version', StringType(), False),
+        StructField('context_device_ad_tracking_enabled', BooleanType(), False),
+        StructField('context_device_manufacturer', StringType(), True),
+        StructField('context_device_model', StringType(), True),
+        StructField('context_device_type', StringType(), True),
+        StructField('context_library_name', StringType(), False),
+        StructField('context_library_version', StringType(), False),
+        StructField('context_locale', StringType(), True),
+        StructField('context_network_wifi', BooleanType(), True),
+        StructField('context_os_name', StringType(), True),
+        StructField('context_timezone', StringType(), False),
+        StructField('event', StringType(), True),
+        StructField('event_text', StringType(), True),
+        StructField('original_timestamp', StringType(), True),
+        StructField('sent_at', StringType(), True),
+        StructField('timestamp', StringType(), True),
+        StructField('user_id', StringType(), False),
+        StructField('context_network_carrier', StringType(), True),
+        StructField('context_device_token', StringType(), True),
+        StructField('context_traits_taxfix_language', StringType(), True)
+    ])
