@@ -33,4 +33,4 @@ Schema validation for Taxfix takehome assignment
 
 
 ### Future Considerations
- 
+ 1) Due to limited amount of data, required fields are only based on the two provided jsons. Hence if a field is only seen in one, then it is not required and if a field is seen in both, then it is required.
