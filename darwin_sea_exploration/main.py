@@ -1,6 +1,6 @@
 # Import pyspark related modules
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import when, count
+from pyspark.sql.functions import count
 
 # Import other modules
 from marshmallow.exceptions import ValidationError
@@ -83,10 +83,20 @@ def main():
     # Create PySpark session to extract out recipe related information
     scSpark = create_pyspark_session()
     sdf_data = load_data(data_folder_path, scSpark)
-    sdf_data = sdf_data.groupBy(["event", "timestamp"]).count().alias("event_count")
+    sdf_data = perform_transformations(sdf_data)
     sdf_data.show()
     save_data(sdf_data, data_folder_path)
     scSpark.stop()
+
+
+def perform_transformations(sdf_data):
+    """
+    Helper function to perform all transformations.
+    :param sdf_data: Pyspark Dataframe
+    :return: resulting dataframe after transformations are performed
+    """
+    sdf_data = sdf_data.groupBy(["event", "timestamp"]).count().alias("event_count")
+    return sdf_data
 
 
 if __name__ == '__main__':

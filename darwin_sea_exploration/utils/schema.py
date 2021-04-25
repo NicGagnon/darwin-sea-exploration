@@ -15,7 +15,7 @@ class DataSchema(Schema):
     context_device_manufacturer = fields.Str(required=True)
     context_device_model = fields.Str(required=True)
     context_device_type = fields.Str(required=True)
-    context_library_name = fields.Str(required=False)
+    context_library_name = fields.Str(required=False, )
     context_library_version = fields.Str(required=False)
     context_locale = fields.Str(required=True)
     context_network_wifi = fields.Bool(required=True)

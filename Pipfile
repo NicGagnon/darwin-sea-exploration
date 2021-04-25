@@ -7,6 +7,9 @@ verify_ssl = true
 pytest = "==6.2.1"
 
 [packages]
+pyspark_stubs = "==3.0.0"
+chispa = "==0.8.2"
+pyspark = "==3.0.0"
 
 
 [requires]
